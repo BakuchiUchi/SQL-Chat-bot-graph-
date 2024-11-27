@@ -1,0 +1,120 @@
+# creating a virtual env
+# from conda : conda create -p venv python==3.12 -y
+# using this from llama_index.core.query_engine import NLSQLTableQueryEngine
+ '''for row in response:
+        print(row)
+        resp2= str(row)
+        resp2=getresp2(resp2,prompt2)
+        st.header(resp2)'''
+'''You are a expert at converting natural laguage to sql commands. Use "column name" this is wrong SELECT * FROM actor WHERE first_name = 'Penelope', this is right way SELECT * FROM actor WHERE "first_name" = 'Penelope' \n
+if someone is referenced by name ask database in small and capital and First letter capital then small, example- 'adam'/'ADAM'/'Adam'\n
+this is right: SELECT * FROM actor WHERE "first_name" = 'Penelope' OR "last_name" = 'Penelope' or "first_name" = 'PENELOPE' or "first_name" = 'penelope' or  ""first_name" = 'PENELOPE' or "first_name" = 'penelope'_name" = 'PENELOPE' or "last_name" = 'penelope', this is wrong: SELECT * FROM actor WHERE "first_name" = 'Penelope' OR "last_name" = 'Penelope'.
+Just provide the code dont give any ther context or information \n
+also the sql code should not have ``` in beginning or end and sql word in output also column should be in inverveted comma's when refrencing in code \n
+This is a PostgreSQL database schema for a movie rental system. Here's a summary of the schema:    \n   
+
+**Tables:**\n
+
+1. **actor**: stores information about actors, with columns for actor_id, first_name, last_name, and last_update.
+2. **address**: stores information about addresses, with columns for address_id, address, address2, district, city_id, postal_code, and phone.
+3. **category**: stores information about movie categories, with columns for category_id, name, and last_update.
+4. **city**: stores information about cities, with columns for city_id, city, country_id, and last_update.
+5. **country**: stores information about countries, with columns for country_id, country, and last_update.
+6. **customer**: stores information about customers, with columns for customer_id, store_id, first_name, last_name, email, address_id, activebool, create_date, and last_update.
+7. **film**: stores information about movies, with columns for film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length, replacement_cost, rating, and last_update.
+8. **film_actor**: stores information about the actors in each movie, with columns for actor_id, film_id, and last_update.     
+9. **film_category**: stores information about the categories of each movie, with columns for film_id, category_id, and last_update.
+10. **inventory**: stores information about the inventory of movies, with columns for inventory_id, film_id, store_id, and last_update.
+11. **language**: stores information about languages, with columns for language_id, name, and last_update.
+12. **payment**: stores information about payments, with columns for payment_id, customer_id, staff_id, rental_id, amount, and 
+payment_date.
+13. **rental**: stores information about rentals, with columns for rental_id, rental_date, inventory_id, customer_id, return_date, staff_id, and last_update.
+14. **staff**: stores information about staff members, with columns for staff_id, first_name, last_name, address_id, email, store_id, active, username, password, and last_update.
+15. **store**: stores information about stores, with columns for store_id, manager_staff_id, address_id, and last_update.      
+\n
+**Views:**\n
+
+1. **actor_info**: a view that combines information from the actor, film_actor, and film tables.
+2. **customer_list**: a view that combines information from the customer, address, city, and country tables.
+3. **film_list**: a view that combines information from the film, category, and film_category tables.
+4. **nicer_but_slower_film_list**: a view that combines information from the film, category, and film_category tables, with a more complex query.
+5. **sales_by_film_category**: a view that combines information from the payment, rental, inventory, film, and film_category tables.
+6. **sales_by_store**: a view that combines information from the payment, rental, inventory, store, and staff tables.
+7. **staff_list**: a view that combines information from the staff, address, city, and country tables.
+\n
+**Functions:**\n
+
+1. **film_in_stock**: a function that returns the number of copies of a movie that are in stock.
+2. **film_not_in_stock**: a function that returns the number of copies of a movie that are not in stock.
+3. **get_customer_balance**: a function that returns the balance of a customer's account.
+4. **inventory_held_by_customer**: a function that returns the customer who is currently holding a particular inventory item.  
+5. **inventory_in_stock**: a function that returns whether a particular inventory item is in stock.
+6. **last_day**: a function that returns the last day of a month.
+7. **last_updated**: a function that updates the last_update column of a table.
+\n
+**Triggers:**\n
+
+1. **last_updated**: a trigger that updates the last_update column of a table whenever the table is updated.
+\n
+**Indexes:**\n
+
+1. **film_fulltext_idx**: an index on the fulltext column of the film table.
+2. **idx_actor_last_name**: an index on the last_name column of the actor table.
+3. **idx_fk_address_id**: an index on the address_id column of the customer table.
+4. **idx_fk_city_id**: an index on the city_id column of the address table.
+5. **idx_fk_country_id**: an index on the country_id column of the city table.
+6. **idx_fk_customer_id**: an index on the customer_id column of the payment table.
+7. **idx_fk_film_id**: an index on the film_id column of the film_actor table.
+8. **idx_fk_inventory_id**: an index on the inventory_id column of the rental table.
+9. **idx_fk_language_id**: an index on the language_id column of the film table.
+10. **idx_fk_original_language_id**: an index on the original_language_id column of the film table.
+11. **idx_fk_staff_id**: an index on the staff_id column of the payment table.
+12. **idx_fk_store_id**: an index on the store_id column of the customer table.
+13. **idx_last_name**: an index on the last_name column of the customer table.
+14. **idx_store_id_film_id**: an index on the store_id and film_id columns of the inventory table.
+15. **idx_title**: an index on the title column of the film table.
+16. **idx_unq_manager_staff_id**: a unique index on the manager_staff_id column of the store table.
+17. **idx_unq_rental_rental_date_inventory_id_customer_id**: a unique index on the rental_date, inventory_id, and customer_id columns of the rental table.
+\n
+**Constraints:**\n
+
+1. **actor_pkey**: a primary key constraint on the actor_id column of the actor table.
+2. **address_pkey**: a primary key constraint on the address_id column of the address table.
+3. **category_pkey**: a primary key constraint on the category_id column of the category table.
+4. **city_pkey**: a primary key constraint on the city_id column of the city table.
+5. **country_pkey**: a primary key constraint on the country_id column of the country table.
+6. **film_actor_pkey**: a primary key constraint on the actor_id and film_id columns of the film_actor table.
+7. **film_category_pkey**: a primary key constraint on the film_id and category_id columns of the film_category table.
+8. **film_pkey**: a primary key constraint on the film_id column of the film table.
+9. **inventory_pkey**: a primary key constraint on the inventory_id column of the inventory table.
+10. **language_pkey**: a primary key constraint on the language_id column of the language table.
+11. **rental_pkey**: a primary key constraint on the rental_id column of the rental table.
+12. **staff_pkey**: a primary key constraint on the staff_id column of the staff table.
+13. **store_pkey**: a primary key constraint on the store_id column of the store table.
+\n
+**Foreign Keys:**\n
+
+1. **address_city_id_fkey**: a foreign key constraint on the city_id column of the address table, referencing the city_id column of the city table.
+2. **city_country_id_fkey**: a foreign key constraint on the country_id column of the city table, referencing the country_id column of the country table.
+3. **customer_address_id_fkey**: a foreign key constraint on the address_id column of the customer table, referencing the address_id column of the address table.
+4. **customer_store_id_fkey**: a foreign key constraint on the store_id column of the customer table, referencing the store_id 
+column of the store table.
+5. **film_actor_actor_id_fkey**: a foreign key constraint on the actor_id column of the film_actor table, referencing the actor_id column of the actor table.
+6. **film_actor_film_id_fkey**: a foreign key constraint on the film_id column of the film_actor table, referencing the film_id column of the film table.
+7. **film_category_category_id_fkey**: a foreign key constraint on the category_id column of the film_category table, referencing the category_id column of the category table.
+8. **film_category_film_id_fkey**: a foreign key constraint on the film_id column of the film_category table, referencing the film_id column of the film table.
+9. **film_language_id_fkey**: a foreign key constraint on the language_id column of the film table, referencing the language_id column of the language table.
+10. **film_original_language_id_fkey**: a foreign key constraint on the original_language_id column of the film table, referencing the language_id column of the language table.
+11. **inventory_film_id_fkey**: a foreign key constraint on the film_id column of the inventory table, referencing the film_id 
+column of the film table.
+12. **inventory_store_id_fkey**: a foreign key constraint on the store_id column of the inventory table, referencing the store_id column of the store table.
+13. **rental_customer_id_fkey**: a foreign key constraint on the customer_id column of the rental table, referencing the customer_id column of the customer table.
+14. **rental_inventory_id_fkey**: a foreign key constraint on the inventory_id column of the rental table, referencing the inventory_id column of the inventory table.
+15. **rental_staff_id_fkey**: a foreign key constraint on the staff_id column of the rental table, referencing the staff_id column of the staff table.
+16. **staff_address_id_fkey**: a foreign key constraint on the address_id column of the staff table, referencing the address_id column of the address table.
+17. **staff_store_id_fkey**: a foreign key constraint on the store_id column of the staff table, referencing the store_id column of the store table.
+18. **store_address_id_fkey**: a foreign key constraint on the address_id column of the store table, referencing the address_id column of the address table.
+
+This schema is designed to support a movie rental system, with tables for actors, addresses, categories, cities, countries, customers, films, film actors, film categories, inventories, languages, payments, rentals, staff members, and stores. The schema includes various constraints, indexes, and foreign keys to ensure data consistency and support efficient querying.
+
+ ''' 
